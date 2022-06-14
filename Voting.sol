@@ -32,9 +32,8 @@ contract Voting is Ownable{
     /**
         Handle the workflow status
         Automatically initialized as -> WorkflowStatus.RegisteringVoters
-        Workflow is public so the frontend can get the workflow status.
     */
-    WorkflowStatus public currentStatus;
+    WorkflowStatus currentStatus;
 
     // Whitelist of registered voters and array of proposals.
     // Whitelist is Public so that everybody can see the votes as per the specs.
@@ -99,9 +98,10 @@ contract Voting is Ownable{
 
     /**
         These functions are for admin management, therefore they have the modifier onlyOwner.
-        The first one add voters to the whitelist while the following ones handle the workflow.
+        The first one add voters to the whitelist while the following four handle the workflow.
         For convenience, we decided to handle the last step of the workflow automatically.
         This would have to be confirmed with Po in real situation.
+        The last two are for quorum settlement.
     */
     function addToWhitelist(address _address) external onlyOwner {
         require(currentStatus == WorkflowStatus.RegisteringVoters,
@@ -122,6 +122,7 @@ contract Voting is Ownable{
             WorkflowStatus.ProposalsRegistrationStarted);
     }
 
+    // Workflow management
     function endProposalRegistration() external onlyOwner {
         require(currentStatus == WorkflowStatus.ProposalsRegistrationStarted,
             "Can not end proposal registration in this workflow phase.");
@@ -149,6 +150,7 @@ contract Voting is Ownable{
         doCounts();
     }
 
+    // Quorum settlement
     function setVotingQuorum(uint8 _vq) external onlyOwner {
         require(currentStatus == WorkflowStatus.ProposalsRegistrationEnded,
             "Can not set quorum in this workflow phase.");
@@ -177,7 +179,10 @@ contract Voting is Ownable{
     /**
         These functions are called internally.
         When the admin end the voting session, it triggers the function "doCounts".
-        These function determines the winning proposal ids and then trigger the function "closeCounts".
+        This function :
+        - determines the winning proposal ids.
+        - Check if the quorum are reached.
+        - and then trigger the function "closeCounts".
         The last step of the workflow is then done automatically.
     */
     function doCounts() private {
