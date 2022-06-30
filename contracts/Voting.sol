@@ -186,18 +186,24 @@ contract Voting is Ownable{
         The last step of the workflow is then done automatically.
     */
     function doCounts() private {
-        uint _highestVote = 0;
-        for (uint8 _i = 0; _i < proposals.length; _i ++) {
-            if (proposals[_i].voteCount == _highestVote){
-                winningProposalIds.push(_i);
-            } else if (proposals[_i].voteCount > _highestVote) {
+
+        uint _highestVote;
+
+        for (uint8 _i = 0; _i < proposals.length; _i++) {
+            if (proposals[_i].voteCount > _highestVote) {
                 _highestVote = proposals[_i].voteCount;
-                delete winningProposalIds;
-                winningProposalIds.push(_i);
             }
         }
-        for (uint8 _i = 0; _i < winningProposalIds.length; _i ++) {
-            winningProposalsDescriptions.push(proposals[winningProposalIds[_i]].description);
+
+        for (uint _j = 0; _j < proposals.length; _j++) {
+            if (proposals[_j].voteCount == _highestVote) {
+                winningProposalIds.push(_j);
+            }
+        }
+
+        // This will be remove later and dealt with in dApp
+        for (uint8 _k = 0; _k < winningProposalIds.length; _k ++) {
+            winningProposalsDescriptions.push(proposals[winningProposalIds[_k]].description);
         }
 
         // We will check the quorum and send related events to be handled in frontend.
