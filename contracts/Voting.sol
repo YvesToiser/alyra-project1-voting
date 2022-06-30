@@ -61,12 +61,25 @@ contract Voting is Ownable{
     // custom events for quorum
     event VotingQuorumEvent(bool reached);
     event WinningQuorumEvent(bool reached);
+    event LogBadCall(address user);
+    event LogDepot(address user, uint quantity);
 
     // Modifier
     modifier onlyVoter {
         require(whitelist[msg.sender].isRegistered == true,
             "You are not registered as a voter.");
         _;
+    }
+
+    /**
+        We have a receive and fallback function to handle case of people sending ether or making wrong calls
+        */
+    receive() external payable {
+        emit LogDepot(msg.sender, msg.value);
+    }
+
+    fallback() external {
+        emit LogBadCall(msg.sender);
     }
 
     /**
