@@ -1,0 +1,34 @@
+{
+  "name": "alyra-project1-voting",
+  "version": "1.0.0",
+  "description": "This is the first project in the Alyra training \"Blockchain developer\". Project #1 : Voting system",
+  "main": "truffle-config.js",
+  "author": "Yves Toiser",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YvesToiser/alyra-project1-voting.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YvesToiser/alyra-project1-voting/issues"
+  },
+  "homepage": "https://github.com/YvesToiser/alyra-project1-voting#readme",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "compile": "truffle compile",
+    "deploy": "truffle deploy",
+    "test": "truffle test",
+    "migrate": "truffle migrate"
+  },
+  "devDependencies": {
+    "@truffle/hdwallet-provider": "^2.0.9",
+    "dotenv": "^16.0.1",
+    "eth-gas-reporter": "^0.2.25"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.6.0",
+    "@openzeppelin/test-helpers": "latest"
+  }
+}
